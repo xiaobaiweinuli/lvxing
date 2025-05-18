@@ -1,46 +1,97 @@
-// 顶层build.gradle文件
-buildscript {
-    ext {
-        // 定义版本号
-        kotlin_version = '1.8.0'
-        core_ktx_version = '1.10.1'
-        appcompat_version = '1.6.1'
-        material_version = '1.9.0'
-        constraint_layout_version = '2.1.4'
-        navigation_version = '2.6.0'
-        lifecycle_version = '2.6.1'
-        room_version = '2.5.2'
-        coroutines_version = '1.6.4'
-        hilt_version = '2.44'
-        datastore_version = '1.0.0'
-        work_version = '2.8.1'
-        location_version = '21.0.1'
+// app模块的build.gradle文件
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-parcelize'
+}
+
+android {
+    namespace 'com.example.travelplanapp'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.travelplanapp"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
     
-    repositories {
-        google()
-        mavenCentral()
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version"
-        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    
+    buildFeatures {
+        viewBinding true
+        dataBinding true
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        // 高德地图仓库
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        // 百度地图仓库
-        maven { url "https://maven.aliyun.com/repository/jcenter" }
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
+dependencies {
+    // 核心库
+    implementation "androidx.core:core-ktx:$core_ktx_version"
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "com.google.android.material:material:$material_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
+    
+    // 导航组件
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+    
+    // 生命周期组件
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    
+    // Room数据库
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    
+    // Kotlin协程
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    
+    // Hilt依赖注入
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    
+    // DataStore
+    implementation "androidx.datastore:datastore-preferences:$datastore_version"
+    
+    // WorkManager
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+    
+    // 位置服务
+    implementation "com.google.android.gms:play-services-location:$location_version"
+    
+    // 高德地图SDK（可选择一种地图SDK）
+    implementation 'com.amap.api:3dmap:9.5.0'
+    implementation 'com.amap.api:search:9.5.0'
+    
+    // 百度地图SDK（可选择一种地图SDK）
+    implementation 'com.baidu.lbsyun:BaiduMapSDK_Map:7.5.0'
+    implementation 'com.baidu.lbsyun:BaiduMapSDK_Search:7.5.0'
+    
+    // 测试库
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
